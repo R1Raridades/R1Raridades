@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R1 Raridades - Catálogo Oficial</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #faf8f5;
+            color: #2c2c2c;
+            line-height: 1.6;
+        }
+        
+        /* Sticky Navigation Bar */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background-color: #1a1a1a;
+            color: #c5a880;
+            padding: 15px 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-bottom: 2px solid #c5a880;
+            letter-spacing: 1px;
+        }
+        .sticky-nav a {
+            color: #c5a880;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+        .sticky-nav a:hover {
+            color: #fff;
+        }
+
+        /* Header Section */
+        header {
+            background: linear-gradient(rgba(15, 15, 15, 0.9), rgba(30, 30, 30, 0.95)), url('criado mudo.jpg') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 80px 20px;
+            border-bottom: 5px solid #c5a880;
+        }
+        .header-logo {
+            font-size: 3.5rem;
+            font-family: 'Georgia', serif;
+            color: #c5a880;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+        .header-subtitle {
+            font-size: 1.3rem;
+            color: #e0e0e0;
+            font-style: italic;
+            letter-spacing: 1px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Category Titles */
+        .category-section {
+            margin-bottom: 60px;
+            scroll-margin-top: 70px;
+        }
+        .category-header {
+            font-family: 'Georgia', serif;
+            font-size: 2.2rem;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #c5a880;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .category-subtitle {
+            font-size: 1rem;
+            color: #666;
+            font-weight: normal;
+            margin-top: 5px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Grid Layout for Cards */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* Product Card Styles */
+        .product-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #eaeaea;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+        }
+
+        /* Image Display Wrapper */
+        .image-wrapper {
+            width: 100%;
+            height: 280px;
+            background-color: #f0ede9;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .product-card:hover .image-wrapper img {
+            transform: scale(1.06);
+        }
+
+        /* Product Label Badges */
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #1a1a1a;
+            color: #c5a880;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: 1px solid #c5a880;
+        }
+
+        /* Card Content Area */
+        .card-body {
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .product-title {
+            font-family: 'Georgia', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .product-desc {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        /* Card Pricing Footer */
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .price-tag {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #9e7844;
+        }
+        .price-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: -2px;
+        }
+
+        /* Order/Contact Button inside card */
+        .btn-order {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+            border: 1px solid #1a1a1a;
+        }
+        .product-card:hover .btn-order {
+            background-color: #c5a880;
+            color: #1a1a1a;
+            border-color: #c5a880;
+        }
+
+        /* Footer Info */
+        footer {
+            background-color: #1a1a1a;
+            color: #aaa;
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 4px solid #c5a880;
+            margin-top: 80px;
+        }
+        footer p {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        footer .brand {
+            color: #c5a880;
+            font-family: 'Georgia', serif;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .header-logo { font-size: 2.5rem; }
+            .category-header { font-size: 1.7rem; }
+            .sticky-nav { font-size: 0.95rem; padding: 12px 10px; }
+            .sticky-nav a { margin: 0 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <div class="sticky-nav">
+        <a href="#antiguidades">📜 Antiguidades & Raridades</a>
+        <a href="#pet">🐾 Espaço Pet</a>
+    </div>
+
+    <!-- Header Banner -->
+    <header>
+        <div class="header-logo">R1 RARIDADES</div>
+        <div class="header-subtitle">Onde o passado encontra o estilo — Catálogo Exclusivo de Produtos</div>
+    </header>
+
+    <div class="container">
+
+        <!-- CATEGORY: ANTIGUIDADES E RARIDADES -->
+        <section id="antiguidades" class="category-section">
+            <div class="category-header">
+                <div>
+                    📜 Antiguidades & Raridades
+                    <div class="category-subtitle">Peças exclusivas, obras de arte e relíquias de coleção</div>
+                </div>
+            </div>
+            
+            <div class="product-grid">
+                <!-- Item 1 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Porcelana</span>
+                        <img src="sopeiras da celebração.jpg" alt="Sopeiras da Celebração">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Sopeiras da Celebração</div>
+                        <div class="product-desc">Par de sopeiras antigas em porcelana branca de alta qualidade, ricas em detalhes esculpidos em relevo floral e arabescos clássicos na tampa e no corpo. Verdadeiras joias de mesa posta.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço</span>
+                                <div class="price-tag">R$ 1.500,00</div>
+                            </div>
+                            <span class="btn-order">Disponível</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Móvel</span>
+                        <img src="criado mudo.jpg" alt="Criado-Mudo da Bisa">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Criado-Mudo da Bisa</div>
+                        <div class="product-desc">Bela peça de época em madeira maciça com acabamento natural. Possui uma gaveta superior e uma portinha inferior com puxadores clássicos em metal trabalhado estilo colonial. Pés palito retrô.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço</span>
+                                <div class="price-tag">R$ 1.200,00</div>
+                            </div>
+                            <span class="btn-order">Disponível</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Móvel</span>
+                        <img src="mesa de canto.jpg" alt="Mesa de Canto Antiga">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Mesa de Canto Antiga</div>
+                        <div class="product-desc">Charmosa mesa rústica de canto construída em madeira maciça com acabamento escuro. Apresenta linda pátina original e marcas naturais do tempo. Possui uma gaveta central discreta.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço</span>
+                                <div class="price-tag">R$ 1.200,00</div>
+                            </div>
+                            <span class="btn-order">Disponível</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Arte</span>
+                        <img src="poty original.jpg" alt="Gravura Poty Lazzarotto">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Gravura Original Poty Lazzarotto</div>
+                        <div class="product-desc">Gravura autêntica do renomado artista curitibano Poty Lazzarotto (1997), produzida para a série especial das Cervejarias Kaiser. Edição numerada exclusiva 18/20, ilustrando cena de jogo de cartas.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço</span>
+                                <div class="price-tag">R$ 1.100,00</div>
+                            </div>
+                            <span class="btn-order">Raridade</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Futebol</span>
+                        <img src="corridas CFC - comemoração titulo de 85.jpg" alt="Medalhas Coritiba Título 85">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Quadro Medalhas Coritiba (Título 85)</div>
+                        <div class="product-desc">Quadro decorativo com moldura branca contendo medalhas oficiais de corrida comemorativas do Coritiba Foot Ball Club, celebrando a Corrida do Centenário e o histórico título do Brasileirão de 1985.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço</span>
+                                <div class="price-tag">R$ 300,00</div>
+                            </div>
+                            <span class="btn-order">Coxa Branca</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Vintage</span>
+                        <img src="jogo war decada de 80.jpg" alt="Jogo WAR Original Anos 80">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Jogo WAR Original (Década de 80)</div>
+                        <div class="product-desc">Edição clássica e vintage original dos anos 1980 do maior jogo de estratégia do Brasil. Acompanha mapa-múndi de encaixe, dados e as pecinhas plásticas originais em suas divisórias.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço</span>
+                                <div class="price-tag">R$ 250,00</div>
+                            </div>
+                            <span class="btn-order">Nostalgia</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Relógio</span>
+                        <img src="relogio de bolso.jpg" alt="Relógio de Bolso Technos">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Relógio de Bolso Technos Vintage</div>
+                        <div class="product-desc">Elegante relógio de bolso com acabamento dourado e corrente inclusa. Acompanha o luxuoso estojo original acolchoado, manual de instruções e o certificado de garantia de época da marca Technos.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço</span>
+                                <div class="price-tag">R$ 180,00</div>
+                            </div>
+                            <span class="btn-order">Impecável</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 8 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Livro</span>
+                        <img src="livro nova brasilia.jpg" alt="Livro Nova Brasília Ilha do Mel">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Livro "Bem-vindo a Nova Brasília"</div>
+                        <div class="product-desc">Rara e belíssima obra literária/fotográfica de Daniel Medeiros, retratando o cotidiano caiçara, a cultura e as paisagens exuberantes da comunidade de Nova Brasília, localizada na Ilha do Mel.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço</span>
+                                <div class="price-tag">R$ 120,00</div>
+                            </div>
+                            <span class="btn-order">Cultura</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 9 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Livros</span>
+                        <img src="fdc53cbd-28cf-41d0-8b10-882f6d3d7c92.jpg" alt="Livros Direito e Sociedade">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Livros Selecionados – Ciências Humanas</div>
+                        <div class="product-desc">Combo com duas grandes obras fundamentais para a área jurídica e social conservadas em excelente estado (lacrados): "Ensino Jurídico e(m) Crise" por Lenio Streck e "Desvendando o Capitalismo".</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço</span>
+                                <div class="price-tag">R$ 80,00</div>
+                            </div>
+                            <span class="btn-order">Lacrados</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 10 -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Música</span>
+                        <img src="raridades do bom som.jpg" alt="Discos de Vinil Clássicos">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">Discos de Vinil Clássicos (Bom Som)</div>
+                        <div class="product-desc">Seleção de relíquias em alta fidelidade. Títulos icônicos incluindo Phil Collins (Serious Hits Live), Novos Baianos (Acabou Chorare) e os grandes sucessos de Bezerra da Silva. Valor por unidade.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço Unitário</span>
+                                <div class="price-tag">R$ 50,00</div>
+                            </div>
+                            <span class="btn-order">Coleção</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORY: ESPAÇO PET -->
+        <section id="pet" class="category-section">
+            <div class="category-header">
+                <div>
+                    🐾 Espaço Pet — Caminhas de Alto Padrão
+                    <div class="category-subtitle">Caminhas, colchonetes e sofázinhos premium com estampas modernas de marcas famosas</div>
+                </div>
+            </div>
+
+            <!-- SUB: CAMAS RETANGULARES DE LUXO -->
+            <h3 style="font-size: 1.4rem; color: #1a1a1a; margin: 30px 0 15px; font-family: 'Georgia', serif;">🛏️ Camas Retangulares de Luxo (Formato Sofázinho)</h3>
+            <div class="product-grid" style="margin-bottom: 40px;">
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="e8f404c5-8445-47c3-ae90-3bfdbe19ee28.jpg" alt="Cama Retangular Louis Vuitton Marrom"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Retangular – Grife Marrom</div>
+                        <div class="product-desc">Estampa inspirada na grife Louis Vuitton clássica. Formato sofázinho com laterais reforçadas, super confortável.</div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="0d12c133-d2ff-49fb-8d14-063387e833e4.jpg" alt="Cama Retangular Louis Vuitton Preta"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Retangular – Grife Preta</div>
+                        <div class="product-desc">Estampa monograma colorida sobre fundo preto estilo Louis Vuitton. Acompanha linda almofada decorativa em osso.</div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="2d1556fe-8422-4a55-92eb-e0760cd31ff8.jpg" alt="Cama Retangular Chanel Preta"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Retangular – Grife Monocromática</div>
+                        <div class="product-desc">Design premium inspirado na Chanel preta e branca. Visual sofisticado, minimalista e muito elegante.</div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="6aacf9ff-9cfa-4642-9c9c-455789a1c91b.jpg" alt="Cama Retangular Hermès Laranja"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Retangular – Grife Laranja/Preto</div>
+                        <div class="product-desc">Estampa esportiva vibrante inspirada na grife Hermès Paris. Um verdadeiro luxo para o descanso do pet.</div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="27a98e1b-06b4-4aa4-9318-3e8c921951af.jpg" alt="Cama Retangular Tiffany"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Retangular – Grife Azul Tiffany</div>
+                        <div class="product-desc">Visual refinado e charmoso no icônico tom Azul Tiffany com interior preto macio e almofada de ossinho combinando.</div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="92a6da90-8e19-4112-8c0d-d170478e4188.jpg" alt="Cama Retangular Suede Rústica"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Retangular – Suede Marrom</div>
+                        <div class="product-desc">Acabamento rústico em tecido suede liso marrom de alta resistência. Toque extremamente aveludado e macio.</div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="786e318a-5d9f-4995-87b9-da0373215b09.jpg" alt="Cama Retangular Bordô Casinha"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Retangular – Bordô Já pra Casinha</div>
+                        <div class="product-desc">Cama clássica na cor bordô elegante com estampa interna delicada de patinhas brancas e almofadinha acolchoada.</div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="aaa.jpg" alt="Cama Retangular Estampa Berçário"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Retangular – Linha Berçário</div>
+                        <div class="product-desc">Delicada estampa infantil em tons verde-água e branco com desenhos fofos. Ideal para filhotes ou pets dóceis.</div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB: CAMINHAS TIPO COLCHONETE -->
+            <h3 style="font-size: 1.4rem; color: #1a1a1a; margin: 30px 0 15px; font-family: 'Georgia', serif;">↕️ Caminhas Tipo Colchonete Premium</h3>
+            <div class="product-grid" style="margin-bottom: 40px;">
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="36d32027-112d-462f-b3a8-f56ce203c1a4.jpg" alt="Colchonete Gucci"></div>
+                    <div class="card-body">
+                        <div class="product-title">Colchonete Premium – Estilo Gucci</div>
+                        <div class="product-desc">Preenchimento acolchoado premium em gomos. Estampa icônica inspirada em grife de luxo internacional.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 80,00</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="d2eb9dff-c387-4939-bc19-c156acf2cb51.jpg" alt="Colchonete Harley-Davidson"></div>
+                    <div class="card-body">
+                        <div class="product-title">Colchonete Premium – Estilo Motociclista</div>
+                        <div class="product-desc">Estampa cheia de atitude inspirada na lendária marca Harley-Davidson. Muito resistente e macio.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 80,00</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="2f2bbe64-87b7-4eb2-abae-d44598b83231.jpg" alt="Colchonete Já pra Casinha"></div>
+                    <div class="card-body">
+                        <div class="product-title">Colchonete Premium – Azul Já pra Casinha</div>
+                        <div class="product-desc">Fundo clássico em azul-marinho com letras e ossinhos decorativos. Ótimo isolamento térmico contra o chão.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 80,00</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="8ee11d26-dfbe-4da5-a701-d7db7f5eb3c1.jpg" alt="Colchonete Patinhas e Corações"></div>
+                    <div class="card-body">
+                        <div class="product-title">Colchonete Premium – Patinhas & Corações</div>
+                        <div class="product-desc">Estampa super amorosa e delicada com pequenos corações vermelhos e pegadas pet sobre um fundo escuro.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 80,00</div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB: CAMAS REDONDINHAS -->
+            <h3 style="font-size: 1.4rem; color: #1a1a1a; margin: 30px 0 15px; font-family: 'Georgia', serif;">⭕ Camas Redondinhas Soft Confort</h3>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="6f4c4623-6357-48b0-b168-575445b82e7c.jpg" alt="Cama Redonda Hermès"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Redonda – Estilo Hermès</div>
+                        <div class="product-desc">Combinação estilosa de preto com detalhes laranja vivo de grife. Bordas altas acolhedoras para o pet se aninhar.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="4ba58449-2481-410a-99cd-32b5e7591d91.jpg" alt="Cama Redonda Louis Vuitton"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Redonda – Estilo Louis Vuitton</div>
+                        <div class="product-desc">Padrão de monograma colorido sobre fundo preto de alta qualidade. Conforto anatômico com toque macio.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="04564329-4b3b-4ee0-96a6-a4f818569915.jpg" alt="Cama Redonda Azul Poá"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Redonda – Azul Escuro Poá</div>
+                        <div class="product-desc">Estampa fofa e tradicional em azul escuro com delicadas bolinhas brancas. Um charme atemporal.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="66752ef8-f413-4dc7-bf9f-5c6274716ed3.jpg" alt="Cama Redonda Étnica"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Redonda – Padrão Étnico</div>
+                        <div class="product-desc">Belo grafismo geométrico preto e branco com fundo bege. Ideal para compor ambientes modernos.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="2d045961-5a48-4123-8fdd-ed026bfedc22.jpg" alt="Cama Redonda Ursinhos Rosa"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Redonda – Ursinhos Delicados</div>
+                        <div class="product-desc">Modelo infantil em tom rosa bebê decorado com fofos ursinhos de pelúcia e almofada interna muito suave.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="efc812bd-4f50-4a40-a7cf-d25bb3a078b1.jpg" alt="Cama Redonda Nuvens Amarela"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Redonda – Nuvens e Arco-Íris</div>
+                        <div class="product-desc">Base amarela ensolarada com estampa alegre de nuvens sorridentes e arcos-íris. Divertida e confortável.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="image-wrapper"><img src="74541240-cb7c-45fe-ac86-077c5a582494.jpg" alt="Cama Redonda Estrelada Rosa"></div>
+                    <div class="card-body">
+                        <div class="product-title">Cama Redonda – Céu Estrelado</div>
+                        <div class="product-desc">Fundo rosa charmoso repleto de constelações, estrelas brancas e douradas. Toque extra de aconchego.</div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer Area -->
+    <footer>
+        <div class="brand">R1 RARIDADES</div>
+        <p>&copy; 2026 Catálogo Digital de Produtos Exclusivos.</p>
+        <p>Consulte a disponibilidade de estoque e tamanhos. Fotos meramente ilustrativas.</p>
+    </footer>
+
+</body>
+</html>
