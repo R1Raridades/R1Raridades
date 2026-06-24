@@ -1,15 +1,4 @@
-# Let's read the latest state of the HTML from the previous run to ensure we modify it perfectly.
-# In the previous python environment, html_content was defined. Let's see if we can reconstruct the exact full HTML with the new requirements:
-# 1. Image Zoom / Modal feature (JavaScript + CSS).
-# 2. Thumbnail support for multiple photos (CSS + JS).
-# 3. Add a "Cofre" (Safe) product with a nice description and estimated price in the Antiguidades section.
-
-# Let's estimate a fair market price for an antique safe (cofre antigo): 
-# Antique safes usually range from R$ 1.500 to R$ 4.500 or more depending on size, branding (like Fichet, Bernardini), working locks/keys, and cast iron details. Let's position it nicely around R$ 2.800,00 as a great antique piece.
-
-# Let's rebuild the complete HTML code.
-
-html_content_updated = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -155,7 +144,7 @@ html_content_updated = """<!DOCTYPE html>
             transform: scale(1.04);
         }
 
-        /* Thumbnails Wrapper (New Feature) */
+        /* Thumbnails Wrapper */
         .thumbnails-wrapper {
             display: flex;
             gap: 8px;
@@ -256,7 +245,7 @@ html_content_updated = """<!DOCTYPE html>
             border-color: #c5a880;
         }
 
-        /* Zoom Lightbox / Modal (New Feature) */
+        /* Zoom Lightbox / Modal */
         .lightbox {
             display: none;
             position: fixed;
@@ -364,12 +353,6 @@ html_content_updated = """<!DOCTYPE html>
                         <span class="badge">Relíquia</span>
                         <img src="cofre.jpg" onclick="abrirZoom(this.src)" alt="Cofre Antigo de Ferro" id="img-cofre">
                     </div>
-                    <!-- Se você tiver fotos extras do cofre futuramente, basta descomentar as linhas abaixo:
-                    <div class="thumbnails-wrapper">
-                        <img src="cofre.jpg" class="thumb active" onclick="mudarFoto('img-cofre', this)">
-                        <img src="cofre_aberto.jpg" class="thumb" onclick="mudarFoto('img-cofre', this)">
-                    </div>
-                    -->
                     <div class="card-body">
                         <div class="product-title">Cofre Antigo em Ferro Fundido</div>
                         <div class="product-desc">Uma verdadeira fortaleza histórica. Imponente cofre antigo confeccionado em ferro maciço reforçado, apresentando rico trabalho artesanal com brasões em relevo e detalhes de época na fechadura. Peça pesada, ideal para decoração industrial de alto padrão, colecionadores ou decoração de escritórios refinados. Acompanha segredo mecânico operacional e chave original.</div>
@@ -429,7 +412,7 @@ html_content_updated = """<!DOCTYPE html>
                     </div>
                     <div class="card-body">
                         <div class="product-title">Mesa de Canto Antiga</div>
-                        <div class="product-desc">Charmosa mesa rústica de canto construída in madeira maciça com acabamento escuro. Apresenta linda pátina original e marcas naturais do tempo. Possui uma gaveta central discreta.</div>
+                        <div class="product-desc">Charmosa mesa rústica de canto construída em madeira maciça com acabamento escuro. Apresenta linda pátina original e marcas naturais do tempo. Possui uma gaveta central discreta.</div>
                         <div class="card-footer">
                             <div>
                                 <span class="price-label">Preço</span>
@@ -754,7 +737,7 @@ html_content_updated = """<!DOCTYPE html>
 
     </div>
 
-    <!-- Lightbox Modal Area for Zoom (New Feature) -->
+    <!-- Lightbox Modal Area for Zoom -->
     <div id="lightboxModal" class="lightbox" onclick="fecharZoom()">
         <span class="lightbox-close" onclick="fecharZoom()">&times;</span>
         <img class="lightbox-img" id="lightboxImg" src="" alt="Imagem Ampliada">
@@ -767,7 +750,7 @@ html_content_updated = """<!DOCTYPE html>
         <p>Consulte a disponibilidade de estoque e tamanhos. Fotos meramente ilustrativas.</p>
     </footer>
 
-    <!-- JavaScript Features (New Feature) -->
+    <!-- JavaScript Features -->
     <script>
         // Feature 1: Zoom Modal Display
         function abrirZoom(src) {
@@ -784,11 +767,9 @@ html_content_updated = """<!DOCTYPE html>
 
         // Feature 2: Switch main product image using thumbnails
         function mudarFoto(mainImgId, thumbElement) {
-            // Update main photo source
             const mainImg = document.getElementById(mainImgId);
             mainImg.src = thumbElement.src;
             
-            // Toggle active thumbnail styling inside this specific card
             const siblingThumbs = thumbElement.parentElement.getElementsByClassName('thumb');
             for (let t of siblingThumbs) {
                 t.classList.remove('active');
@@ -796,7 +777,6 @@ html_content_updated = """<!DOCTYPE html>
             thumbElement.classList.add('active');
         }
 
-        // Close zoom modal if Escape key is pressed
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') fecharZoom();
         });
@@ -804,9 +784,3 @@ html_content_updated = """<!DOCTYPE html>
 
 </body>
 </html>
-"""
-
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(html_content_updated)
-
-print("Updated HTML code successfully compiled.")
