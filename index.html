@@ -436,7 +436,13 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Arte</span>
-                        <img src="poty original.jpg" onclick="abrirZoom(this.src)" alt="Gravura Poty Lazzarotto">
+                        <!-- Adicionamos o ID 'img-poty' na foto principal -->
+                        <img src="poty original.jpg" onclick="abrirZoom(this.src)" alt="Gravura Poty Lazzarotto" id="img-poty">
+                    </div>
+                    <!-- Nova Área de Miniaturas do Poty -->
+                    <div class="thumbnails-wrapper">
+                        <img src="poty original.jpg" class="thumb active" onclick="mudarFoto('img-poty', this)" alt="Foto 1">
+                        <img src="5f36eea6-c895-4e5c-a084-9a499dc74d98.jpg" class="thumb" onclick="mudarFoto('img-poty', this)" alt="Foto 2">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Gravura Original Poty Lazzarotto</div>
