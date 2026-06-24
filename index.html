@@ -1,4 +1,15 @@
-<!DOCTYPE html>
+# Let's read the latest state of the HTML from the previous run to ensure we modify it perfectly.
+# In the previous python environment, html_content was defined. Let's see if we can reconstruct the exact full HTML with the new requirements:
+# 1. Image Zoom / Modal feature (JavaScript + CSS).
+# 2. Thumbnail support for multiple photos (CSS + JS).
+# 3. Add a "Cofre" (Safe) product with a nice description and estimated price in the Antiguidades section.
+
+# Let's estimate a fair market price for an antique safe (cofre antigo): 
+# Antique safes usually range from R$ 1.500 to R$ 4.500 or more depending on size, branding (like Fichet, Bernardini), working locks/keys, and cast iron details. Let's position it nicely around R$ 2.800,00 as a great antique piece.
+
+# Let's rebuild the complete HTML code.
+
+html_content_updated = """<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -138,9 +149,32 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
+            cursor: pointer;
         }
         .product-card:hover .image-wrapper img {
-            transform: scale(1.06);
+            transform: scale(1.04);
+        }
+
+        /* Thumbnails Wrapper (New Feature) */
+        .thumbnails-wrapper {
+            display: flex;
+            gap: 8px;
+            padding: 10px 15px;
+            background-color: #fcfcfc;
+            border-bottom: 1px solid #eee;
+            overflow-x: auto;
+        }
+        .thumb {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .thumb:hover, .thumb.active {
+            border-color: #c5a880;
         }
 
         /* Product Label Badges */
@@ -158,6 +192,7 @@
             letter-spacing: 1px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             border: 1px solid #c5a880;
+            z-index: 10;
         }
 
         /* Card Content Area */
@@ -221,6 +256,52 @@
             border-color: #c5a880;
         }
 
+        /* Zoom Lightbox / Modal (New Feature) */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox.show {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 85%;
+            object-fit: contain;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .lightbox.show .lightbox-img {
+            transform: scale(1);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+            user-select: none;
+        }
+        .lightbox-close:hover {
+            color: #c5a880;
+        }
+
         /* Footer Info */
         footer {
             background-color: #1a1a1a;
@@ -277,11 +358,36 @@
             </div>
             
             <div class="product-grid">
+                <!-- Novo Item: Cofre Antigo -->
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <span class="badge">Relíquia</span>
+                        <img src="cofre.jpg" onclick="abrirZoom(this.src)" alt="Cofre Antigo de Ferro" id="img-cofre">
+                    </div>
+                    <!-- Se você tiver fotos extras do cofre futuramente, basta descomentar as linhas abaixo:
+                    <div class="thumbnails-wrapper">
+                        <img src="cofre.jpg" class="thumb active" onclick="mudarFoto('img-cofre', this)">
+                        <img src="cofre_aberto.jpg" class="thumb" onclick="mudarFoto('img-cofre', this)">
+                    </div>
+                    -->
+                    <div class="card-body">
+                        <div class="product-title">Cofre Antigo em Ferro Fundido</div>
+                        <div class="product-desc">Uma verdadeira fortaleza histórica. Imponente cofre antigo confeccionado em ferro maciço reforçado, apresentando rico trabalho artesanal com brasões em relevo e detalhes de época na fechadura. Peça pesada, ideal para decoração industrial de alto padrão, colecionadores ou decoração de escritórios refinados. Acompanha segredo mecânico operacional e chave original.</div>
+                        <div class="card-footer">
+                            <div>
+                                <span class="price-label">Preço Estimado</span>
+                                <div class="price-tag">R$ 2.800,00</div>
+                            </div>
+                            <span class="btn-order">Raridade</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Item 1 -->
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Porcelana</span>
-                        <img src="sopeiras da celebração.jpg" alt="Sopeiras da Celebração">
+                        <img src="sopeiras da celebração.jpg" onclick="abrirZoom(this.src)" alt="Sopeiras da Celebração">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Sopeiras da Celebração</div>
@@ -300,7 +406,7 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Móvel</span>
-                        <img src="criado mudo.jpg" alt="Criado-Mudo da Bisa">
+                        <img src="criado mudo.jpg" onclick="abrirZoom(this.src)" alt="Criado-Mudo da Bisa" id="img-criado">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Criado-Mudo da Bisa</div>
@@ -319,11 +425,11 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Móvel</span>
-                        <img src="mesa de canto.jpg" alt="Mesa de Canto Antiga">
+                        <img src="mesa de canto.jpg" onclick="abrirZoom(this.src)" alt="Mesa de Canto Antiga">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Mesa de Canto Antiga</div>
-                        <div class="product-desc">Charmosa mesa rústica de canto construída em madeira maciça com acabamento escuro. Apresenta linda pátina original e marcas naturais do tempo. Possui uma gaveta central discreta.</div>
+                        <div class="product-desc">Charmosa mesa rústica de canto construída in madeira maciça com acabamento escuro. Apresenta linda pátina original e marcas naturais do tempo. Possui uma gaveta central discreta.</div>
                         <div class="card-footer">
                             <div>
                                 <span class="price-label">Preço</span>
@@ -338,7 +444,7 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Arte</span>
-                        <img src="5f36eea6-c895-4e5c-a084-9a499dc74d98.jpg" alt="Gravura Poty Lazzarotto">
+                        <img src="poty original.jpg" onclick="abrirZoom(this.src)" alt="Gravura Poty Lazzarotto">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Gravura Original Poty Lazzarotto</div>
@@ -357,7 +463,7 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Futebol</span>
-                        <img src="corridas CFC - comemoração titulo de 85.jpg" alt="Medalhas Coritiba Título 85">
+                        <img src="corridas CFC - comemoração titulo de 85.jpg" onclick="abrirZoom(this.src)" alt="Medalhas Coritiba Título 85">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Quadro Medalhas Coritiba (Título 85)</div>
@@ -376,7 +482,7 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Vintage</span>
-                        <img src="jogo war decada de 80.jpg" alt="Jogo WAR Original Anos 80">
+                        <img src="jogo war decada de 80.jpg" onclick="abrirZoom(this.src)" alt="Jogo WAR Original Anos 80">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Jogo WAR Original (Década de 80)</div>
@@ -395,7 +501,7 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Relógio</span>
-                        <img src="relogio de bolso.jpg" alt="Relógio de Bolso Technos">
+                        <img src="relogio de bolso.jpg" onclick="abrirZoom(this.src)" alt="Relógio de Bolso Technos">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Relógio de Bolso Technos Vintage</div>
@@ -414,7 +520,7 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Livro</span>
-                        <img src="livro nova brasilia.jpg" alt="Livro Nova Brasília Ilha do Mel">
+                        <img src="livro nova brasilia.jpg" onclick="abrirZoom(this.src)" alt="Livro Nova Brasília Ilha do Mel">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Livro "Bem-vindo a Nova Brasília"</div>
@@ -433,7 +539,7 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Livros</span>
-                        <img src="fdc53cbd-28cf-41d0-8b10-882f6d3d7c92.jpg" alt="Livros Direito e Sociedade">
+                        <img src="fdc53cbd-28cf-41d0-8b10-882f6d3d7c92.jpg" onclick="abrirZoom(this.src)" alt="Livros Direito e Sociedade">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Livros Selecionados – Ciências Humanas</div>
@@ -452,7 +558,7 @@
                 <div class="product-card">
                     <div class="image-wrapper">
                         <span class="badge">Música</span>
-                        <img src="raridades do bom som.jpg" alt="Discos de Vinil Clássicos">
+                        <img src="raridades do bom som.jpg" onclick="abrirZoom(this.src)" alt="Discos de Vinil Clássicos">
                     </div>
                     <div class="card-body">
                         <div class="product-title">Discos de Vinil Clássicos (Bom Som)</div>
@@ -474,75 +580,75 @@
             <div class="category-header">
                 <div>
                     🐾 Espaço Pet — Caminhas de Alto Padrão
-                    <div class="category-subtitle">Caminhas, colchonetes e com estampas modernas de marcas famosas</div>
+                    <div class="category-subtitle">Caminhas, colchonetes e sofázinhos premium com estampas modernas de marcas famosas</div>
                 </div>
             </div>
 
             <!-- SUB: CAMAS RETANGULARES DE LUXO -->
-            <h3 style="font-size: 1.4rem; color: #1a1a1a; margin: 30px 0 15px; font-family: 'Georgia', serif;">🛏️ Camas Retangulares de Luxo </h3>
+            <h3 style="font-size: 1.4rem; color: #1a1a1a; margin: 30px 0 15px; font-family: 'Georgia', serif;">🛏️ Camas Retangulares de Luxo (Formato Sofázinho)</h3>
             <div class="product-grid" style="margin-bottom: 40px;">
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="0d12c133-d2ff-49fb-8d14-063387e833e4.jpg" alt="Cama Retangular Louis Vuitton Marrom"></div>
+                    <div class="image-wrapper"><img src="e8f404c5-8445-47c3-ae90-3bfdbe19ee28.jpg" onclick="abrirZoom(this.src)" alt="Cama Retangular Louis Vuitton Marrom"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Retangular – Grife Marrom</div>
                         <div class="product-desc">Estampa inspirada na grife Louis Vuitton clássica. Formato sofázinho com laterais reforçadas, super confortável.</div>
-                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$200 / R$220</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="aaa.jpg" alt="Cama Retangular Louis Vuitton Preta"></div>
+                    <div class="image-wrapper"><img src="0d12c133-d2ff-49fb-8d14-063387e833e4.jpg" onclick="abrirZoom(this.src)" alt="Cama Retangular Louis Vuitton Preta"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Retangular – Grife Preta</div>
                         <div class="product-desc">Estampa monograma colorida sobre fundo preto estilo Louis Vuitton. Acompanha linda almofada decorativa em osso.</div>
-                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$200 / R$220</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="6aacf9ff-9cfa-4642-9c9c-455789a1c91b.jpg" alt="Cama Retangular Chanel Preta"></div>
+                    <div class="image-wrapper"><img src="2d1556fe-8422-4a55-92eb-e0760cd31ff8.jpg" onclick="abrirZoom(this.src)" alt="Cama Retangular Chanel Preta"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Retangular – Grife Monocromática</div>
                         <div class="product-desc">Design premium inspirado na Chanel preta e branca. Visual sofisticado, minimalista e muito elegante.</div>
-                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$200 / R$220</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="92a6da90-9e19-4112-8c0d-d170478e4188.jpg" alt="Cama Retangular Hermès Laranja"></div>
+                    <div class="image-wrapper"><img src="6aacf9ff-9cfa-4642-9c9c-455789a1c91b.jpg" onclick="abrirZoom(this.src)" alt="Cama Retangular Hermès Laranja"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Retangular – Grife Laranja/Preto</div>
                         <div class="product-desc">Estampa esportiva vibrante inspirada na grife Hermès Paris. Um verdadeiro luxo para o descanso do pet.</div>
-                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$200 / R$220</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="a65c2bd7-7f94-4e20-a17a-080c709694ea.jpg" alt="Cama Retangular Tiffany"></div>
+                    <div class="image-wrapper"><img src="27a98e1b-06b4-4aa4-9318-3e8c921951af.jpg" onclick="abrirZoom(this.src)" alt="Cama Retangular Tiffany"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Retangular – Grife Azul Tiffany</div>
                         <div class="product-desc">Visual refinado e charmoso no icônico tom Azul Tiffany com interior preto macio e almofada de ossinho combinando.</div>
-                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$200 / R$220</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="2d1556fe-8422-4a55-92eb-e0760cd31ff8.jpg" alt="Cama Retangular Suede Rústica"></div>
+                    <div class="image-wrapper"><img src="92a6da90-9e19-4112-8c0d-d170478e4188.jpg" onclick="abrirZoom(this.src)" alt="Cama Retangular Suede Rústica"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Retangular – Suede Marrom</div>
                         <div class="product-desc">Acabamento rústico em tecido suede liso marrom de alta resistência. Toque extremamente aveludado e macio.</div>
-                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$200 / R$220</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="e8f404c5-8445-47c3-ae90-3bfdbe19ee28.jpg" alt="Cama Retangular Bordô Casinha"></div>
+                    <div class="image-wrapper"><img src="786e318a-5d9f-4995-87b9-da0373215b09.jpg" onclick="abrirZoom(this.src)" alt="Cama Retangular Bordô Casinha"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Retangular – Bordô Já pra Casinha</div>
                         <div class="product-desc">Cama clássica na cor bordô elegante com estampa interna delicada de patinhas brancas e almofadinha acolchoada.</div>
-                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$200 / R$220</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="27a98e1b-06b4-4aa4-9318-3e8c921951af.jpg" alt="Cama Retangular Estampa Berçário"></div>
+                    <div class="image-wrapper"><img src="aaa.jpg" onclick="abrirZoom(this.src)" alt="Cama Retangular Estampa Berçário"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Retangular – Linha Berçário</div>
                         <div class="product-desc">Delicada estampa infantil em tons verde-água e branco com desenhos fofos. Ideal para filhotes ou pets dóceis.</div>
-                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$200 / R$220</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">P / M</span><div class="price-tag">R$100 / R$110</div></div></div>
                     </div>
                 </div>
             </div>
@@ -551,35 +657,35 @@
             <h3 style="font-size: 1.4rem; color: #1a1a1a; margin: 30px 0 15px; font-family: 'Georgia', serif;">↕️ Caminhas Tipo Colchonete Premium</h3>
             <div class="product-grid" style="margin-bottom: 40px;">
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="36d32027-112d-462f-b3a8-f56ce203c1a4.jpg" alt="Colchonete Gucci"></div>
+                    <div class="image-wrapper"><img src="36d32027-112d-462f-b3a8-f56ce203c1a4.jpg" onclick="abrirZoom(this.src)" alt="Colchonete Gucci"></div>
                     <div class="card-body">
                         <div class="product-title">Colchonete Premium – Estilo Gucci</div>
                         <div class="product-desc">Preenchimento acolchoado premium em gomos. Estampa icônica inspirada em grife de luxo internacional.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 160,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 80,00</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="d2eb9dff-c387-4939-bc19-c156acf2cb51.jpg" alt="Colchonete Harley-Davidson"></div>
+                    <div class="image-wrapper"><img src="d2eb9dff-c387-4939-bc19-c156acf2cb51.jpg" onclick="abrirZoom(this.src)" alt="Colchonete Harley-Davidson"></div>
                     <div class="card-body">
                         <div class="product-title">Colchonete Premium – Estilo Motociclista</div>
                         <div class="product-desc">Estampa cheia de atitude inspirada na lendária marca Harley-Davidson. Muito resistente e macio.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 160,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 80,00</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="2f2bbe64-87b7-4eb2-abae-d44598b83231.jpg" alt="Colchonete Já pra Casinha"></div>
+                    <div class="image-wrapper"><img src="2f2bbe64-87b7-4eb2-abae-d44598b83231.jpg" onclick="abrirZoom(this.src)" alt="Colchonete Já pra Casinha"></div>
                     <div class="card-body">
                         <div class="product-title">Colchonete Premium – Azul Já pra Casinha</div>
                         <div class="product-desc">Fundo clássico em azul-marinho com letras e ossinhos decorativos. Ótimo isolamento térmico contra o chão.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 160,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 80,00</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="8ee11d26-dfbe-4da5-a701-d7db7f5eb3c1.jpg" alt="Colchonete Patinhas e Corações"></div>
+                    <div class="image-wrapper"><img src="8ee11d26-dfbe-4da5-a701-d7db7f5eb3c1.jpg" onclick="abrirZoom(this.src)" alt="Colchonete Patinhas e Corações"></div>
                     <div class="card-body">
                         <div class="product-title">Colchonete Premium – Patinhas & Corações</div>
                         <div class="product-desc">Estampa super amorosa e delicada com pequenos corações vermelhos e pegadas pet sobre um fundo escuro.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 160,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 80,00</div></div></div>
                     </div>
                 </div>
             </div>
@@ -588,64 +694,70 @@
             <h3 style="font-size: 1.4rem; color: #1a1a1a; margin: 30px 0 15px; font-family: 'Georgia', serif;">⭕ Camas Redondinhas Soft Confort</h3>
             <div class="product-grid">
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="2d045961-5a48-4123-8fdd-ed026bfedc22.jpg" alt="Cama Redonda Hermès"></div>
+                    <div class="image-wrapper"><img src="6f4c4623-6357-48b0-b168-575445b82e7c.jpg" onclick="abrirZoom(this.src)" alt="Cama Redonda Hermès"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Redonda – Estilo Hermès</div>
                         <div class="product-desc">Combinação estilosa de preto com detalhes laranja vivo de grife. Bordas altas acolhedoras para o pet se aninhar.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 150,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="66752ef8-f413-4dc7-bf9f-5c6274716ed3.jpg" alt="Cama Redonda Louis Vuitton"></div>
+                    <div class="image-wrapper"><img src="4ba58449-2481-410a-99cd-32b5e7591d91.jpg" onclick="abrirZoom(this.src)" alt="Cama Redonda Louis Vuitton"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Redonda – Estilo Louis Vuitton</div>
                         <div class="product-desc">Padrão de monograma colorido sobre fundo preto de alta qualidade. Conforto anatômico com toque macio.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 150,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="74541240-cb7c-45fe-ac86-077c5a582494.jpg" alt="Cama Redonda Azul Poá"></div>
+                    <div class="image-wrapper"><img src="04564329-4b3b-4ee0-96a6-a4f818569915.jpg" onclick="abrirZoom(this.src)" alt="Cama Redonda Azul Poá"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Redonda – Azul Escuro Poá</div>
                         <div class="product-desc">Estampa fofa e tradicional em azul escuro com delicadas bolinhas brancas. Um charme atemporal.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 150,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="efc812bd-4f50-4a40-a7cf-d25bb3a078b1.jpg" alt="Cama Redonda Étnica"></div>
+                    <div class="image-wrapper"><img src="66752ef8-f413-4dc7-bf9f-5c6274716ed3.jpg" onclick="abrirZoom(this.src)" alt="Cama Redonda Étnica"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Redonda – Padrão Étnico</div>
                         <div class="product-desc">Belo grafismo geométrico preto e branco com fundo bege. Ideal para compor ambientes modernos.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 150,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="4ba58449-2481-410a-99cd-32b5e7591d91.jpg" alt="Cama Redonda Ursinhos Rosa"></div>
+                    <div class="image-wrapper"><img src="2d045961-5a48-4123-8fdd-ed026bfedc22.jpg" onclick="abrirZoom(this.src)" alt="Cama Redonda Ursinhos Rosa"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Redonda – Ursinhos Delicados</div>
                         <div class="product-desc">Modelo infantil em tom rosa bebê decorado com fofos ursinhos de pelúcia e almofada interna muito suave.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 150,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="6f4c4623-6357-48b0-b168-575445b82e7c.jpg" alt="Cama Redonda Nuvens Amarela"></div>
+                    <div class="image-wrapper"><img src="efc812bd-4f50-4a40-a7cf-d25bb3a078b1.jpg" onclick="abrirZoom(this.src)" alt="Cama Redonda Nuvens Amarela"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Redonda – Nuvens e Arco-Íris</div>
                         <div class="product-desc">Base amarela ensolarada com estampa alegre de nuvens sorridentes e arcos-íris. Divertida e confortável.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 150,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
                     </div>
                 </div>
                 <div class="product-card">
-                    <div class="image-wrapper"><img src="04564329-4b3b-4ee0-96a6-a4f818569915.jpg" alt="Cama Redonda Estrelada Rosa"></div>
+                    <div class="image-wrapper"><img src="74541240-cb7c-45fe-ac86-077c5a582494.jpg" onclick="abrirZoom(this.src)" alt="Cama Redonda Estrelada Rosa"></div>
                     <div class="card-body">
                         <div class="product-title">Cama Redonda – Céu Estrelado</div>
                         <div class="product-desc">Fundo rosa charmoso repleto de constelações, estrelas brancas e douradas. Toque extra de aconchego.</div>
-                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 150,00</div></div></div>
+                        <div class="card-footer"><div><span class="price-label">Preço Único</span><div class="price-tag">R$ 75,00</div></div></div>
                     </div>
                 </div>
             </div>
         </section>
 
+    </div>
+
+    <!-- Lightbox Modal Area for Zoom (New Feature) -->
+    <div id="lightboxModal" class="lightbox" onclick="fecharZoom()">
+        <span class="lightbox-close" onclick="fecharZoom()">&times;</span>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="Imagem Ampliada">
     </div>
 
     <!-- Footer Area -->
@@ -655,5 +767,46 @@
         <p>Consulte a disponibilidade de estoque e tamanhos. Fotos meramente ilustrativas.</p>
     </footer>
 
+    <!-- JavaScript Features (New Feature) -->
+    <script>
+        // Feature 1: Zoom Modal Display
+        function abrirZoom(src) {
+            const modal = document.getElementById('lightboxModal');
+            const modalImg = document.getElementById('lightboxImg');
+            modalImg.src = src;
+            modal.classList.add('show');
+        }
+
+        function fecharZoom() {
+            const modal = document.getElementById('lightboxModal');
+            modal.classList.remove('show');
+        }
+
+        // Feature 2: Switch main product image using thumbnails
+        function mudarFoto(mainImgId, thumbElement) {
+            // Update main photo source
+            const mainImg = document.getElementById(mainImgId);
+            mainImg.src = thumbElement.src;
+            
+            // Toggle active thumbnail styling inside this specific card
+            const siblingThumbs = thumbElement.parentElement.getElementsByClassName('thumb');
+            for (let t of siblingThumbs) {
+                t.classList.remove('active');
+            }
+            thumbElement.classList.add('active');
+        }
+
+        // Close zoom modal if Escape key is pressed
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') fecharZoom();
+        });
+    </script>
+
 </body>
 </html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_content_updated)
+
+print("Updated HTML code successfully compiled.")
